@@ -1,0 +1,12 @@
+# Development stack: runs both submodules' dev containers in one project.
+#
+#   docker compose -f docker-compose.dev.yml up --build
+#
+# Nothing is redefined here -- each service is pulled in from the submodule's own
+# compose file, so there is a single source of truth for the dev setup and this
+# stays in sync automatically. Both get source bind-mounted and hot-reload:
+#   frontend  http://localhost:5173  (Vite HMR)
+#   backend   http://localhost:8000  (uvicorn --reload)
+include:
+  - T-RexEx-frontend/docker-compose.yml
+  - T-RexEx-backend/docker-compose.yml

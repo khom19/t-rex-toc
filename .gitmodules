@@ -1,3 +1,6 @@
 [submodule "T-RexEx-backend"]
 	path = T-RexEx-backend
 	url = https://github.com/xSistted/T-RexEx-backend.git
+[submodule "T-RexEx-frontend"]
+	path = T-RexEx-frontend
+	url = https://github.com/Kunanon-Intaraphol/TOC_front.git

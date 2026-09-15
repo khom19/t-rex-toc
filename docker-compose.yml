@@ -1,0 +1,36 @@
+# Production stack: frontend (nginx + static bundle) in front of the backend API.
+#
+#   docker compose up --build   ->  http://localhost:8080
+#
+# For day-to-day development use docker-compose.dev.yml instead -- it mounts
+# source and hot-reloads both services, which this file deliberately does not.
+services:
+  backend:
+    build:
+      context: ./T-RexEx-backend
+      target: prod
+    # No host port: only the frontend's nginx reaches it, over the compose network.
+    expose:
+      - "8000"
+    environment:
+      - DEBUG=false
+      # nginx proxies /api/ so the browser is same-origin; CORS stays closed.
+      - CORS_ORIGINS=http://localhost:8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  frontend:
+    build:
+      context: ./T-RexEx-frontend
+      target: prod
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
