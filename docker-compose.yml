@@ -29,7 +29,7 @@ services:
       context: ./T-RexEx-frontend
       target: prod
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       backend:
         condition: service_started
